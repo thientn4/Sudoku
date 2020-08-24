@@ -1,0 +1,90 @@
+rowBoard=[
+    [0,0,9,0,8,0,5,0,0],
+    [0,1,0,0,0,0,0,0,2],
+    [5,0,0,4,3,0,8,0,6],
+    [9,0,6,0,0,5,0,0,3],
+    [0,5,0,0,7,0,0,0,0],
+    [0,4,0,0,0,8,1,0,9],
+    [0,0,1,3,0,0,0,0,4],
+    [0,0,4,0,0,9,6,0,0],
+    [8,3,0,0,6,0,0,1,0]
+]
+
+
+
+
+
+
+
+
+
+
+
+
+def valid(option,pos):
+    row=pos//10;
+    column=pos%10;
+    colBoard=[[],[],[],[],[],[],[],[],[]]
+    grid=[[[],[],[]],[[],[],[]],[[],[],[]]]
+    for i in range(len(rowBoard)):
+        for j in range(len(rowBoard[i])):
+            colBoard[j].append(rowBoard[i][j])
+            grid[i//3][j//3].append(rowBoard[i][j])
+    if option in rowBoard[row] or option in colBoard[column] or option in grid[row//3][column//3]:
+        del grid
+        del colBoard
+        return False
+    del grid
+    del colBoard
+    return True
+
+def find_empty():
+    for i in range(len(rowBoard)):
+        for j in range(len(rowBoard[i])):
+            if(rowBoard[i][j])==0:
+                return i*10+j
+    return None
+
+def solve():
+    pos=find_empty()
+    if pos==None:
+        return True
+    for a in range(1,10):
+        if valid(a,pos):
+            rowBoard[pos//10][pos%10]=a
+            if solve(): return True
+            else:rowBoard[pos//10][pos%10]=0
+    return False
+
+#find empty spot
+#if no spot found --> return true
+#pick valid numbers to put in the current chosen spot and check for all cases
+#recurse with remaining spot and check if it is the right path to solve and mark the path by returning true (resulting in no spot found)
+#if not the right path set that spot back to empty
+
+def print_board():
+    for i in range(len(rowBoard)):
+        if i%3==0 and i!=0:
+            print("-----------------------")
+        for j in range(len(rowBoard[i])):
+            if j%3==0 and j!=0:
+                print(' |',end='')
+            print(" "+str(rowBoard[i][j]),end='')
+        print("");
+
+
+
+
+
+
+
+
+
+
+print_board()
+for i in range(6): print()
+if solve():
+    print_board()
+    print("Done")
+else:
+    print("Unsolvable")
